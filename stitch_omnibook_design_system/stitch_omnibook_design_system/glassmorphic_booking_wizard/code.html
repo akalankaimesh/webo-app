@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OmniBook - Universal Booking Flow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-tertiary-container": "#461f00",
+                "surface-container-high": "#222a3d",
+                "primary-fixed-dim": "#adc6ff",
+                "on-tertiary-fixed-variant": "#723600",
+                "secondary-fixed": "#d3e4fe",
+                "primary": "#adc6ff",
+                "surface-tint": "#adc6ff",
+                "on-background": "#dae2fd",
+                "on-tertiary": "#502400",
+                "secondary-fixed-dim": "#b7c8e1",
+                "on-error": "#690005",
+                "tertiary-container": "#df7412",
+                "surface-bright": "#31394d",
+                "secondary": "#b7c8e1",
+                "tertiary-fixed": "#ffdcc6",
+                "on-surface-variant": "#c2c6d6",
+                "outline": "#8c909f",
+                "tertiary": "#ffb786",
+                "inverse-surface": "#dae2fd",
+                "on-surface": "#dae2fd",
+                "on-secondary": "#213145",
+                "error": "#ffb4ab",
+                "inverse-on-surface": "#283044",
+                "surface-container": "#171f33",
+                "on-secondary-fixed-variant": "#38485d",
+                "on-primary": "#002e6a",
+                "on-tertiary-fixed": "#311400",
+                "primary-container": "#4d8eff",
+                "surface-container-low": "#131b2e",
+                "primary-fixed": "#d8e2ff",
+                "outline-variant": "#424754",
+                "tertiary-fixed-dim": "#ffb786",
+                "background": "#0b1326",
+                "surface-variant": "#2d3449",
+                "on-primary-container": "#00285d",
+                "surface": "#0b1326",
+                "error-container": "#93000a",
+                "secondary-container": "#3a4a5f",
+                "on-secondary-fixed": "#0b1c30",
+                "inverse-primary": "#005ac2",
+                "surface-container-lowest": "#060e20",
+                "on-primary-fixed": "#001a42",
+                "surface-dim": "#0b1326",
+                "on-secondary-container": "#a9bad3",
+                "surface-container-highest": "#2d3449",
+                "on-primary-fixed-variant": "#004395",
+                "on-error-container": "#ffdad6"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "lg": "48px",
+                "xl": "80px",
+                "base": "8px",
+                "md": "24px",
+                "sm": "12px",
+                "xs": "4px",
+                "container-max": "1280px",
+                "gutter": "24px"
+        },
+        "fontFamily": {
+                "headline-lg": [
+                        "Manrope"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "display-lg": [
+                        "Manrope"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "headline-lg-mobile": [
+                        "Manrope"
+                ],
+                "label-md": [
+                        "JetBrains Mono"
+                ],
+                "headline-md": [
+                        "Manrope"
+                ],
+                "body-sm": [
+                        "Inter"
+                ],
+                "headline-sm": [
+                        "Manrope"
+                ]
+        },
+        "fontSize": {
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body { background-color: #0b1326; } 
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased min-h-screen flex flex-col relative z-0">
+<div class="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-container/20 via-background to-background"></div>
+<!-- TopNavBar -->
+<header class="bg-surface/30 backdrop-blur-md border-b border-white/10 flex justify-between items-center px-gutter w-full sticky top-0 z-50 h-16">
+<div class="flex items-center gap-md">
+<span class="text-headline-sm font-headline-sm font-bold text-primary drop-shadow-[0_0_10px_rgba(173,198,255,0.3)]">OmniBook</span>
+<div class="h-6 w-px bg-white/10 hidden md:block"></div>
+<span class="text-label-md font-label-md text-on-surface-variant hidden md:block">New Booking</span>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<button class="text-on-surface-variant hover:text-primary font-label-md text-label-md hover:bg-white/5 transition-colors duration-150 rounded px-sm py-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">close</span>
+                Exit
+            </button>
+</nav>
+</header>
+<main class="flex-1 max-w-[container-max] mx-auto w-full px-gutter py-xl">
+<!-- Progress Indicator -->
+<div class="mb-xl">
+<div class="flex items-center justify-between relative">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-white/5 -z-10 rounded-full"></div>
+<!-- Step 1 (Active) -->
+<div class="flex flex-col items-center gap-xs px-sm">
+<div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container shadow-[0_0_15px_rgba(173,198,255,0.3)] text-on-primary flex items-center justify-center font-label-md text-label-md">1</div>
+<span class="font-label-md text-label-md text-primary">Select Service</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center gap-xs px-sm">
+<div class="w-8 h-8 rounded-full bg-surface/50 backdrop-blur border border-white/10 text-on-surface-variant flex items-center justify-center font-label-md text-label-md">2</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Date &amp; Time</span>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center gap-xs px-sm">
+<div class="w-8 h-8 rounded-full bg-surface/50 backdrop-blur border border-white/10 text-on-surface-variant flex items-center justify-center font-label-md text-label-md">3</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Details</span>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center gap-xs px-sm">
+<div class="w-8 h-8 rounded-full bg-surface/50 backdrop-blur border border-white/10 text-on-surface-variant flex items-center justify-center font-label-md text-label-md">4</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Confirm</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Main Content Area (8 columns on desktop) -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-xs drop-shadow-[0_0_15px_rgba(218,226,253,0.2)]">Choose a Service</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Select from our available packages below to proceed with your booking.</p>
+</div>
+<!-- Bento Grid for Services -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Service Card 1 -->
+<div class="bg-surface/30 backdrop-blur-md border border-white/10 rounded-lg p-md flex flex-col hover:bg-surface/50 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(173,198,255,0.1)] transition-all duration-300 cursor-pointer relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div class="w-12 h-12 bg-white/5 rounded flex items-center justify-center mb-md text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cleaning_services</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Standard Cleaning</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-1">A thorough basic cleaning for regular maintenance of your space.</p>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Starting at</span><br/>
+<span class="font-headline-md text-headline-md text-primary drop-shadow-[0_0_10px_rgba(173,198,255,0.2)]">$120</span>
+</div>
+<button class="bg-white/5 border border-white/10 text-on-surface hover:bg-white/10 backdrop-blur font-label-md text-label-md py-2 px-4 rounded transition-colors duration-150">Select</button>
+</div>
+</div>
+<!-- Service Card 2 (Selected State Example) -->
+<div class="bg-primary/10 backdrop-blur-md border-2 border-primary rounded-lg p-md flex flex-col relative overflow-hidden shadow-[0_0_30px_rgba(173,198,255,0.15)]">
+<div class="absolute top-0 right-0 p-sm text-primary drop-shadow-[0_0_8px_rgba(173,198,255,0.4)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="w-12 h-12 bg-primary/20 rounded flex items-center justify-center mb-md text-primary drop-shadow-[0_0_10px_rgba(173,198,255,0.3)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">colors_spark</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Deep Cleaning Premium</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-1">Intensive top-to-bottom cleaning including hard-to-reach areas.</p>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Starting at</span><br/>
+<span class="font-headline-md text-headline-md text-primary drop-shadow-[0_0_10px_rgba(173,198,255,0.2)]">$250</span>
+</div>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md py-2 px-4 rounded transition-colors duration-150 border-none shadow-[0_0_15px_rgba(173,198,255,0.3)]">Selected</button>
+</div>
+</div>
+<!-- Service Card 3 -->
+<div class="bg-surface/30 backdrop-blur-md border border-white/10 rounded-lg p-md flex flex-col hover:bg-surface/50 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(173,198,255,0.1)] transition-all duration-300 cursor-pointer relative overflow-hidden group">
+<div class="w-12 h-12 bg-white/5 rounded flex items-center justify-center mb-md text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">moving</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Move-In / Move-Out</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-1">Complete sanitation and detail cleaning for empty properties.</p>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Starting at</span><br/>
+<span class="font-headline-md text-headline-md text-primary drop-shadow-[0_0_10px_rgba(173,198,255,0.2)]">$300</span>
+</div>
+<button class="bg-white/5 border border-white/10 text-on-surface hover:bg-white/10 backdrop-blur font-label-md text-label-md py-2 px-4 rounded transition-colors duration-150">Select</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Pane (4 columns on desktop) -->
+<div class="lg:col-span-4">
+<div class="bg-surface/30 backdrop-blur-xl border border-white/10 rounded-lg p-md sticky top-[100px] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-md border-b border-white/10 pb-sm">Booking Summary</h2>
+<div class="flex flex-col gap-sm mb-lg min-h-[150px]">
+<!-- Selected Item -->
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Deep Cleaning Premium</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">1x Service</p>
+</div>
+<span class="font-label-md text-label-md text-primary drop-shadow-[0_0_8px_rgba(173,198,255,0.2)]">$250.00</span>
+</div>
+<!-- Placeholder for Date/Time (not yet selected) -->
+<div class="flex justify-between items-start opacity-50 mt-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">calendar_today</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Select Date &amp; Time</span>
+</div>
+</div>
+</div>
+<div class="border-t border-white/10 pt-md mb-md">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Subtotal</span>
+<span class="font-body-sm text-body-sm text-on-surface">$250.00</span>
+</div>
+<div class="flex justify-between items-center mb-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tax (Est)</span>
+<span class="font-body-sm text-body-sm text-on-surface">$20.00</span>
+</div>
+<div class="flex justify-between items-center font-headline-sm text-headline-sm text-primary drop-shadow-[0_0_10px_rgba(173,198,255,0.3)]">
+<span>Total</span>
+<span>$270.00</span>
+</div>
+</div>
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-md text-label-md py-3 px-4 rounded shadow-[0_0_20px_rgba(173,198,255,0.2)] hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] transition-all duration-300 flex items-center justify-center gap-xs">
+                        Next Step
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface/30 backdrop-blur-md w-full py-xl px-gutter border-t border-white/10 grid grid-cols-1 md:grid-cols-4 gap-lg mt-auto">
+<div>
+<span class="text-label-md font-label-md font-bold text-primary drop-shadow-[0_0_8px_rgba(173,198,255,0.2)] mb-md block">OmniBook</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 OmniBook SaaS Platform. All rights reserved.</p>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Cookies</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</footer>
+</body></html>

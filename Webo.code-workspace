@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "backend-server"
+		},
+		{
+			"path": "webo-app"
+		},
+		{
+			"path": "stitch_omnibook_design_system/stitch_omnibook_design_system"
+		}
+	],
+	"settings": {}
+}
