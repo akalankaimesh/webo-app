@@ -14,15 +14,26 @@ type ApiResponse = {
   message?: string;
   error?: string;
   user?: {
+    id?: string;
     name?: string;
     email?: string;
     picture?: string;
+    mobile?: string;
+    verified?: boolean;
+    hasPassword?: boolean;
+    profileComplete?: boolean;
   };
 };
 
 export type AuthProfile = {
+  id?: string;
+  email?: string;
   firstName: string;
   picture?: string;
+  mobile?: string;
+  verified?: boolean;
+  hasPassword?: boolean;
+  profileComplete?: boolean;
 };
 
 type Props = {
@@ -128,8 +139,14 @@ export default function AuthModal({ onClose, onAuthSuccess }: Props) {
       if (!res.ok) throw new Error(data.error || "Google login failed.");
       setStatus(data.message || "Signed in successfully.");
       onAuthSuccess({
+        id: data.user?.id,
+        email: data.user?.email,
         firstName: getFirstName(data.user?.name, data.user?.email),
         picture: data.user?.picture,
+        mobile: data.user?.mobile,
+        verified: data.user?.verified,
+        hasPassword: data.user?.hasPassword,
+        profileComplete: data.user?.profileComplete,
       });
       setTimeout(onClose, 1200);
     } catch (e) {
@@ -160,8 +177,14 @@ export default function AuthModal({ onClose, onAuthSuccess }: Props) {
       if (!res.ok) throw new Error(data.error || "Login failed.");
       setStatus(data.message || "Signed in successfully.");
       onAuthSuccess({
+        id: data.user?.id,
+        email: data.user?.email || loginEmail,
         firstName: getFirstName(data.user?.name, data.user?.email || loginEmail),
         picture: data.user?.picture,
+        mobile: data.user?.mobile,
+        verified: data.user?.verified,
+        hasPassword: data.user?.hasPassword,
+        profileComplete: data.user?.profileComplete,
       });
       setTimeout(onClose, 1200);
     } catch (e) {

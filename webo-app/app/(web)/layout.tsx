@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useState } from "react";
+import type { FormEvent, ReactNode } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AuthModal, { type AuthProfile } from "../components/auth/auth-modal";
@@ -11,11 +11,49 @@ type NavItem = {
   href: string;
 };
 
+const AUTH_PROFILE_STORAGE_KEY = "webo.auth.profile";
+const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001";
+
+type UserDetailsResponse = {
+  user?: {
+    email?: string;
+    mobile?: string;
+    verified?: boolean;
+    hasPassword?: boolean;
+    profileComplete?: boolean;
+  };
+  error?: string;
+};
+
 export default function WebLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [showAuth, setShowAuth] = useState(false);
-  const [profile, setProfile] = useState<AuthProfile | null>(null);
+  const [profile, setProfile] = useState<AuthProfile | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    try {
+      const raw = window.localStorage.getItem(AUTH_PROFILE_STORAGE_KEY);
+      if (!raw) {
+        return null;
+      }
+
+      const parsed = JSON.parse(raw) as AuthProfile;
+      return parsed?.firstName ? parsed : null;
+    } catch {
+      window.localStorage.removeItem(AUTH_PROFILE_STORAGE_KEY);
+      return null;
+    }
+  });
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showProfileCompletion, setShowProfileCompletion] = useState(false);
+  const [completeMobile, setCompleteMobile] = useState("");
+  const [completePassword, setCompletePassword] = useState("");
+  const [completeConfirmPassword, setCompleteConfirmPassword] = useState("");
+  const [completeError, setCompleteError] = useState("");
+  const [completeSaving, setCompleteSaving] = useState(false);
+  const profileEmail = profile?.email || "";
   const navItems: NavItem[] = [
     { label: "Services", href: "/services" },
     { label: "Priceing", href: "/priceing" },
@@ -23,6 +61,103 @@ export default function WebLayout({ children }: { children: ReactNode }) {
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ];
+
+  useEffect(() => {
+    if (!profileEmail) {
+      return;
+    }
+
+    let cancelled = false;
+
+    async function fetchUserDetails() {
+      try {
+        const res = await fetch(
+          `${backendBaseUrl}/api/auth/user-details?email=${encodeURIComponent(profileEmail)}`
+        );
+        const data = (await res.json()) as UserDetailsResponse;
+        if (!res.ok || !data.user || cancelled) {
+          return;
+        }
+
+        const needsMobile = !(data.user.mobile || "").trim();
+        const needsPassword = !data.user.hasPassword;
+
+        setCompleteMobile(data.user.mobile || "");
+        setShowProfileCompletion(needsMobile || needsPassword);
+      } catch {
+        // Ignore background profile checks; user can continue using the site.
+      }
+    }
+
+    void fetchUserDetails();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [profileEmail]);
+
+  async function handleCompleteProfileSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    if (!profile?.email) {
+      setCompleteError("Session expired. Please login again.");
+      return;
+    }
+
+    if (!/^\+?\d{7,15}$/.test(completeMobile.replace(/\s/g, ""))) {
+      setCompleteError("Please enter a valid mobile number.");
+      return;
+    }
+
+    if (completePassword.length < 8) {
+      setCompleteError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (completePassword !== completeConfirmPassword) {
+      setCompleteError("Passwords do not match.");
+      return;
+    }
+
+    setCompleteError("");
+    setCompleteSaving(true);
+
+    try {
+      const res = await fetch(`${backendBaseUrl}/api/auth/complete-profile`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: profile.email,
+          mobile: completeMobile,
+          password: completePassword,
+        }),
+      });
+
+      const data = (await res.json()) as UserDetailsResponse;
+      if (!res.ok || !data.user) {
+        setCompleteError(data.error || "Failed to update details.");
+        return;
+      }
+
+      const mergedProfile: AuthProfile = {
+        ...profile,
+        mobile: data.user.mobile || completeMobile,
+        verified: data.user.verified,
+        hasPassword: data.user.hasPassword,
+        profileComplete: data.user.profileComplete,
+      };
+
+      setProfile(mergedProfile);
+      window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(mergedProfile));
+      setCompletePassword("");
+      setCompleteConfirmPassword("");
+      setShowProfileCompletion(false);
+    } catch {
+      setCompleteError("Failed to update details.");
+    } finally {
+      setCompleteSaving(false);
+    }
+  }
 
   return (
     <div className="min-h-screen text-on-background">
@@ -92,7 +227,9 @@ export default function WebLayout({ children }: { children: ReactNode }) {
                     role="menuitem"
                     onClick={() => {
                       setProfile(null);
+                      window.localStorage.removeItem(AUTH_PROFILE_STORAGE_KEY);
                       setShowUserMenu(false);
+                      setShowProfileCompletion(false);
                     }}
                     className="w-full rounded-lg px-3 py-2 text-left text-sm text-on-surface-variant transition-colors hover:bg-white/10 hover:text-on-surface"
                   >
@@ -117,9 +254,70 @@ export default function WebLayout({ children }: { children: ReactNode }) {
           onClose={() => setShowAuth(false)}
           onAuthSuccess={(data) => {
             setProfile(data);
+            window.localStorage.setItem(AUTH_PROFILE_STORAGE_KEY, JSON.stringify(data));
+            setShowUserMenu(false);
+            setShowProfileCompletion(Boolean(data.email && (!data.mobile || !data.hasPassword)));
+            setCompleteMobile(data.mobile || "");
+            setCompletePassword("");
+            setCompleteConfirmPassword("");
+            setCompleteError("");
           }}
         />
       )}
+
+      {showProfileCompletion ? (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4" role="dialog" aria-modal="true">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
+          <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-surface-container-high/95 p-6 shadow-xl backdrop-blur-md">
+            <h3 className="font-display text-2xl font-semibold text-primary">Complete Your Profile</h3>
+            <p className="mt-2 text-sm text-on-surface-variant">
+              Please add your mobile number and set a password to continue using your account.
+            </p>
+
+            <form className="mt-5 flex flex-col gap-3" onSubmit={handleCompleteProfileSubmit} autoComplete="off">
+              <input
+                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary/60 focus:ring-1 focus:ring-primary/30 transition"
+                type="tel"
+                placeholder="Mobile number"
+                autoComplete="off"
+                value={completeMobile}
+                onChange={(e) => setCompleteMobile(e.target.value)}
+                required
+              />
+              <input
+                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary/60 focus:ring-1 focus:ring-primary/30 transition"
+                type="password"
+                placeholder="Set password"
+                autoComplete="off"
+                value={completePassword}
+                onChange={(e) => setCompletePassword(e.target.value)}
+                required
+                minLength={8}
+              />
+              <input
+                className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-on-surface outline-none placeholder:text-on-surface-variant focus:border-primary/60 focus:ring-1 focus:ring-primary/30 transition"
+                type="password"
+                placeholder="Confirm password"
+                autoComplete="off"
+                value={completeConfirmPassword}
+                onChange={(e) => setCompleteConfirmPassword(e.target.value)}
+                required
+                minLength={8}
+              />
+
+              {completeError ? <p className="text-center text-xs text-red-400">{completeError}</p> : null}
+
+              <button
+                type="submit"
+                disabled={completeSaving}
+                className="mt-1 rounded bg-secondary px-4 py-2 text-sm font-semibold text-on-secondary transition hover:bg-secondary/80 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {completeSaving ? "Saving…" : "Save Details"}
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : null}
 
       <main className="flex flex-col">{children}</main>
 

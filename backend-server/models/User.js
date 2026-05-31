@@ -4,8 +4,8 @@ const userSchema = new mongoose.Schema(
   {
     googleId: {
       type: String,
-      required: true,
       unique: true,
+      sparse: true,
     },
     name: {
       type: String,
@@ -19,6 +19,26 @@ const userSchema = new mongoose.Schema(
     picture: {
       type: String,
       default: '',
+    },
+    password: {
+      type: String,
+      default: '',
+    },
+    status: {
+      type: String,
+      default: 'active',
+    },
+    mobile: {
+      type: String,
+      default: '',
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    dob: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }
