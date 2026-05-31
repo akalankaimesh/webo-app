@@ -1,8 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import AuthModal from "../components/auth/auth-modal";
 
 type NavItem = {
   label: string;
@@ -11,6 +13,7 @@ type NavItem = {
 
 export default function WebLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const [showAuth, setShowAuth] = useState(false);
   const navItems: NavItem[] = [
     { label: "Services", href: "/services" },
     { label: "Priceing", href: "/priceing" },
@@ -56,12 +59,14 @@ export default function WebLayout({ children }: { children: ReactNode }) {
               type="text"
             />
           </div>
-          <button className="rounded px-3 py-1.5 text-sm text-primary hover:bg-white/10">Login</button>
-          <button className="rounded bg-secondary px-4 py-1.5 text-sm font-semibold text-on-secondary hover:bg-secondary/80">
+          <button onClick={() => setShowAuth(true)} className="rounded px-3 py-1.5 text-sm text-primary hover:bg-white/10">Login</button>
+          <button onClick={() => setShowAuth(true)} className="rounded bg-secondary px-4 py-1.5 text-sm font-semibold text-on-secondary hover:bg-secondary/80">
             Get Started
           </button>
         </div>
       </nav>
+
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
 
       <main className="flex flex-col">{children}</main>
 
