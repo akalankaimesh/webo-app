@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import AuthModal from "../components/auth/auth-modal";
+import AuthModal, { type AuthProfile } from "../components/auth/auth-modal";
 
 type NavItem = {
   label: string;
@@ -14,6 +14,8 @@ type NavItem = {
 export default function WebLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [showAuth, setShowAuth] = useState(false);
+  const [profile, setProfile] = useState<AuthProfile | null>(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const navItems: NavItem[] = [
     { label: "Services", href: "/services" },
     { label: "Priceing", href: "/priceing" },
@@ -59,14 +61,65 @@ export default function WebLayout({ children }: { children: ReactNode }) {
               type="text"
             />
           </div>
-          <button onClick={() => setShowAuth(true)} className="rounded px-3 py-1.5 text-sm text-primary hover:bg-white/10">Login</button>
-          <button onClick={() => setShowAuth(true)} className="rounded bg-secondary px-4 py-1.5 text-sm font-semibold text-on-secondary hover:bg-secondary/80">
-            Get Started
-          </button>
+          {profile ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowUserMenu((prev) => !prev)}
+                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2 py-1.5"
+                aria-haspopup="menu"
+                aria-expanded={showUserMenu}
+              >
+                {profile.picture ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={profile.picture} alt={profile.firstName} className="h-7 w-7 rounded-full object-cover" />
+                ) : (
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/20 text-xs font-semibold text-primary">
+                    {profile.firstName.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="text-sm font-medium text-on-surface">{profile.firstName}</span>
+                <span className="pr-1 text-xs text-on-surface-variant">▾</span>
+              </button>
+
+              {showUserMenu ? (
+                <div
+                  role="menu"
+                  className="absolute right-0 mt-2 w-40 rounded-xl border border-white/10 bg-surface-container-high/95 p-1.5 shadow-xl backdrop-blur-md"
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setProfile(null);
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full rounded-lg px-3 py-2 text-left text-sm text-on-surface-variant transition-colors hover:bg-white/10 hover:text-on-surface"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              <button onClick={() => setShowAuth(true)} className="rounded px-3 py-1.5 text-sm text-primary hover:bg-white/10">Login</button>
+              <button onClick={() => setShowAuth(true)} className="rounded bg-secondary px-4 py-1.5 text-sm font-semibold text-on-secondary hover:bg-secondary/80">
+                Get Started
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      {showAuth && (
+        <AuthModal
+          onClose={() => setShowAuth(false)}
+          onAuthSuccess={(data) => {
+            setProfile(data);
+          }}
+        />
+      )}
 
       <main className="flex flex-col">{children}</main>
 

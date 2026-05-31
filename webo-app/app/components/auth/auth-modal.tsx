@@ -13,10 +13,21 @@ type LoginTab = "google" | "password";
 type ApiResponse = {
   message?: string;
   error?: string;
+  user?: {
+    name?: string;
+    email?: string;
+    picture?: string;
+  };
+};
+
+export type AuthProfile = {
+  firstName: string;
+  picture?: string;
 };
 
 type Props = {
   onClose: () => void;
+  onAuthSuccess: (profile: AuthProfile) => void;
 };
 
 function CloseButton({ onClick }: { onClick: () => void }) {
@@ -56,7 +67,7 @@ function TabButton({
   );
 }
 
-export default function AuthModal({ onClose }: Props) {
+export default function AuthModal({ onClose, onAuthSuccess }: Props) {
   const [view, setView] = useState<View>("login");
   const [loginTab, setLoginTab] = useState<LoginTab>("google");
   const [status, setStatus] = useState("");
@@ -85,6 +96,18 @@ export default function AuthModal({ onClose }: Props) {
     setView(v);
   }
 
+  function getFirstName(name?: string, email?: string) {
+    if (name && name.trim()) {
+      return name.trim().split(" ")[0];
+    }
+
+    if (email && email.includes("@")) {
+      return email.split("@")[0];
+    }
+
+    return "User";
+  }
+
   // ── Google login ──────────────────────────────────────────────────────────
   async function handleGoogleSuccess(credentialResponse: CredentialResponse) {
     if (!credentialResponse.credential) {
@@ -104,6 +127,10 @@ export default function AuthModal({ onClose }: Props) {
       const data = (await res.json()) as ApiResponse;
       if (!res.ok) throw new Error(data.error || "Google login failed.");
       setStatus(data.message || "Signed in successfully.");
+      onAuthSuccess({
+        firstName: getFirstName(data.user?.name, data.user?.email),
+        picture: data.user?.picture,
+      });
       setTimeout(onClose, 1200);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Google login failed.");
@@ -132,6 +159,10 @@ export default function AuthModal({ onClose }: Props) {
       const data = (await res.json()) as ApiResponse;
       if (!res.ok) throw new Error(data.error || "Login failed.");
       setStatus(data.message || "Signed in successfully.");
+      onAuthSuccess({
+        firstName: getFirstName(data.user?.name, data.user?.email || loginEmail),
+        picture: data.user?.picture,
+      });
       setTimeout(onClose, 1200);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Login failed.");
