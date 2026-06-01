@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import AuthModal, { type AuthProfile } from "../components/auth/auth-modal";
+import { useTheme } from "../components/theme/use-theme";
 
 type NavItem = {
   label: string;
@@ -27,6 +28,7 @@ type UserDetailsResponse = {
 
 export default function WebLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const { theme, toggleTheme, nextThemeLabel, currentThemeLabel } = useTheme();
   const [showAuth, setShowAuth] = useState(false);
   const [profile, setProfile] = useState<AuthProfile | null>(() => {
     if (typeof window === "undefined") {
@@ -189,6 +191,15 @@ export default function WebLayout({ children }: { children: ReactNode }) {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-semibold text-on-surface transition-colors hover:bg-white/20"
+            aria-label={`Switch to ${nextThemeLabel} theme`}
+            title={`Current: ${currentThemeLabel} | Switch to ${nextThemeLabel}`}
+          >
+            {theme === "dark" ? "Dark" : "Light"}
+          </button>
           <div className="hidden items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 md:flex">
             <input
               className="w-28 bg-transparent text-sm text-on-surface outline-none"

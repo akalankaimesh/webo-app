@@ -1,0 +1,507 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OmniBook - Modular Homepage Template</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-primary-fixed-variant": "#3f465c",
+                "background": "#f7f9fb",
+                "on-surface": "#191c1e",
+                "tertiary-fixed": "#6ffbbe",
+                "on-error-container": "#93000a",
+                "on-tertiary-container": "#009668",
+                "surface-variant": "#e0e3e5",
+                "secondary-fixed-dim": "#adc6ff",
+                "on-background": "#191c1e",
+                "primary-fixed-dim": "#bec6e0",
+                "on-primary-container": "#7c839b",
+                "inverse-on-surface": "#eff1f3",
+                "tertiary": "#000000",
+                "primary-fixed": "#dae2fd",
+                "secondary": "#0058be",
+                "tertiary-container": "#002113",
+                "on-primary": "#ffffff",
+                "on-secondary-container": "#fefcff",
+                "tertiary-fixed-dim": "#4edea3",
+                "outline": "#76777d",
+                "primary": "#000000",
+                "on-tertiary-fixed-variant": "#005236",
+                "surface-dim": "#d8dadc",
+                "secondary-fixed": "#d8e2ff",
+                "on-tertiary-fixed": "#002113",
+                "on-error": "#ffffff",
+                "surface-bright": "#f7f9fb",
+                "error": "#ba1a1a",
+                "surface-container-highest": "#e0e3e5",
+                "surface-tint": "#565e74",
+                "inverse-primary": "#bec6e0",
+                "outline-variant": "#c6c6cd",
+                "inverse-surface": "#2d3133",
+                "on-tertiary": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "surface": "#f7f9fb",
+                "secondary-container": "#2170e4",
+                "on-primary-fixed": "#131b2e",
+                "primary-container": "#131b2e",
+                "on-secondary-fixed-variant": "#004395",
+                "surface-container-high": "#e6e8ea",
+                "on-surface-variant": "#45464d",
+                "surface-container": "#eceef0",
+                "on-secondary-fixed": "#001a42",
+                "error-container": "#ffdad6",
+                "surface-container-low": "#f2f4f6",
+                "on-secondary": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "lg": "2rem",
+                "md": "1.5rem",
+                "xs": "0.5rem",
+                "base": "4px",
+                "xl": "3rem",
+                "gutter": "24px",
+                "container-max": "1280px",
+                "sm": "1rem"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "Inter"
+                ],
+                "body-lg": [
+                        "Inter"
+                ],
+                "headline-sm": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Inter"
+                ],
+                "display-lg-mobile": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head><body class="bg-gradient-to-br from-indigo-50 via-white to-blue-50 bg-fixed text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopNavBar Shared Component -->
+<nav class="bg-white/60 backdrop-blur-md docked full-width top-0 border-b border-white/50 flat no shadows flex justify-between items-center px-lg w-full sticky z-50 h-16">
+<div class="flex items-center gap-lg">
+<span class="text-headline-sm font-headline-sm font-black text-primary">OmniBook</span>
+<div class="hidden md:flex items-center gap-md">
+<a class="text-secondary font-bold border-b-2 border-secondary pb-1 font-label-md text-label-md" href="#">Services</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-white/60 transition-colors duration-150 rounded px-2 py-1 font-label-md text-label-md" href="#">Pricing</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-white/60 transition-colors duration-150 rounded px-2 py-1 font-label-md text-label-md" href="#">About</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-white/60 transition-colors duration-150 rounded px-2 py-1 font-label-md text-label-md" href="#">Contact</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<div class="hidden md:flex items-center bg-white/50 backdrop-blur-sm rounded-full px-sm py-xs border border-white/50 focus-within:border-secondary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant mr-xs text-[20px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm text-on-surface w-32 outline-none" placeholder="Search..." type="text"/>
+</div>
+<button class="text-primary font-label-md text-label-md px-sm py-xs hover:bg-white/60 transition-colors duration-150 rounded">Login</button>
+<button class="bg-secondary text-on-secondary font-label-md text-label-md px-md py-xs rounded hover:bg-secondary/80 transition-colors duration-150 shadow-sm scale-95 duration-100">Get Started</button>
+<button class="md:hidden text-on-surface"><span class="material-symbols-outlined" data-icon="menu">menu</span></button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col">
+<!-- Hero Section -->
+<section class="relative py-xl md:py-24 px-lg flex items-center justify-center overflow-hidden border-b border-white/50">
+<div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#000000 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="max-w-container-max w-full mx-auto flex flex-col md:flex-row items-center gap-xl relative z-10">
+<div class="w-full md:w-1/2 flex flex-col gap-md text-center md:text-left">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tight">Your Beauty,<br/>Our Priority</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-lg mx-auto md:mx-0">Expert styling and treatments tailored for you. Experience premium care in a modern, relaxing environment.</p>
+<div class="flex flex-col sm:flex-row items-center gap-sm mt-sm justify-center md:justify-start">
+<button class="bg-primary text-on-primary font-label-md text-label-md px-xl py-sm rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all shadow-sm w-full sm:w-auto">Book Appointment</button>
+<button class="bg-white/50 backdrop-blur-sm text-primary border border-white/60 font-label-md text-label-md px-xl py-sm rounded-lg hover:bg-white/80 transition-all w-full sm:w-auto">View Services</button>
+</div>
+</div>
+<div class="w-full md:w-1/2 mt-lg md:mt-0 relative">
+<div class="aspect-[4/3] rounded-xl overflow-hidden bg-white/60 backdrop-blur-sm border border-white/50 shadow-lg relative group">
+<img alt="Salon interior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 hover:opacity-100" data-alt="A bright, modern, high-end hair salon interior with clean minimalist styling. Sunlight streams through large windows, illuminating pristine white styling stations with large round mirrors and sleek black leather salon chairs. The environment is impeccably clean, feeling professional, serene, and luxurious, fitting a premium corporate SaaS aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArzX7QWnpbmwoeF4GtKxr1dOXISsrZXp40bKv7Kd3_fgu3lLJzDm_gyjjA5SImTFSfsUUrh8snQwi7-TsMEchQwmdcJSh9wLZjVUbUCx9H2EXh-ab5k8RDiYXaIoWsg2OmhtM5MHOmEknmejzgsMjRU5aYE85t9i9G_wRKScVGu3z3SH3-CjclythbwWP-37oLdFZGiladoyt7tOxRSwkkthNrUOiJZS2Zj_PvOTWYrBHhQaJGMaJ9mpE44AOE6B4bvFHqjJS7ZCg3"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-white/80 backdrop-blur-md p-sm rounded-lg border border-white/60 shadow-2xl hidden md:flex items-center gap-sm">
+<div class="w-12 h-12 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Top Rated</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">4.9/5 Average</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Promotions Section -->
+<section class="bg-primary/5 backdrop-blur-md py-lg px-lg relative overflow-hidden border-b border-white/50">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row items-center justify-between gap-md relative z-10">
+<div class="flex flex-col md:flex-row items-center md:items-start gap-md text-center md:text-left">
+<div class="bg-error/10 backdrop-blur-sm text-error font-label-sm text-label-sm px-2 py-1 rounded shadow-sm self-center md:self-start whitespace-nowrap border border-error/20">
+                            Ends in 48h
+                        </div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary mb-xs">Seasonal Special: 20% Off All Facial Treatments</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Rejuvenate your skin with our premium organic facials. Book now to claim your discount.</p>
+</div>
+</div>
+<button class="bg-white/60 backdrop-blur-sm text-primary border border-white/50 font-label-md text-label-md px-xl py-sm rounded-lg hover:bg-white/80 transition-colors shrink-0 whitespace-nowrap">
+                        Claim Offer
+                    </button>
+</div>
+</section>
+<!-- Services Grid -->
+<section class="py-xl px-lg flex flex-col items-center">
+<div class="max-w-container-max w-full mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-md text-headline-md text-primary">Featured Services</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Premium treatments designed to make you look and feel your best.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Service Card 1 -->
+<div class="bg-white/60 backdrop-blur-md rounded-lg border border-white/50 overflow-hidden hover:border-white/80 hover:bg-white/80 transition-all duration-300 group flex flex-col h-full cursor-pointer shadow-lg">
+<div class="h-48 overflow-hidden bg-white/40 relative">
+<img alt="Hair Styling" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A close-up of professional hair styling tools including sleek silver shears, a modern black hairdryer, and a fine-tooth comb resting on a clean white marble countertop. The lighting is bright and soft, emphasizing the high-quality tools in a pristine, minimalist professional salon setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaZ4plyKHyWzdNUYAUSoOLMYd3Qu_0CCOqAQ-FlmyM7qzYaS4KgKZa5D7La34r8_r_-6P53mh9LeYHtrIoAVTShzjqFEG8__M2-6dFphVc1__a4cHTeVvweQPOVdmkqCS9SHkqybQAUC5ekHxcDw1Ak_JDZVkM1BEBwhnsuRq1Cjo4SvesCkgh9uGy5WGSnJ0ojDuB3ev7S_TzEy63GVWvKSW5UTuHI6f7oEymItm-tFN6nJQklNmXNGmLGOmGhhaQ-hPfX9sVMqxr"/>
+<div class="absolute top-sm right-sm bg-white/80 backdrop-blur-sm px-2 py-1 rounded text-label-sm font-label-sm text-on-surface shadow-sm border border-white/60">$45+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-xs">Hair Styling</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-grow">Expert cuts, coloring, and styling tailored to your unique look.</p>
+<div class="flex items-center text-on-surface-variant font-label-sm text-label-sm pt-md border-t border-black/5">
+<span class="material-symbols-outlined mr-xs text-[18px]" data-icon="schedule">schedule</span>
+                                45 min
+                                <div class="ml-auto flex items-center text-secondary group-hover:translate-x-1 transition-transform">
+                                    Book <span class="material-symbols-outlined ml-1 text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Service Card 2 -->
+<div class="bg-white/60 backdrop-blur-md rounded-lg border border-white/50 overflow-hidden hover:border-white/80 hover:bg-white/80 transition-all duration-300 group flex flex-col h-full cursor-pointer shadow-lg">
+<div class="h-48 overflow-hidden bg-white/40 relative">
+<img alt="Facial Treatment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A serene spa setting featuring a close-up of a neat stack of fluffy white towels beside a sleek glass bottle of essential oil and a small smooth black massage stone. The scene is lit with calm, natural, diffused light against a very clean, minimalist light grey background, conveying relaxation and premium care." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmfOFlxKxVMfUlNN3rRtDiVtGmeeOfeRhldu6nfJ2PaPENzA2w2VDmkwWecOPwRYiw6RXZrhrVm0POe7rQjR1em12WblLsQRJXzawL9OAWwJ47ZTc1kkjO7t9ZGlO4S4Gsrg0L0NgppgHpNjI_uWepdYHVqbdCnlaWlp1Aae2MYwzTsgYjY6KN5BDHSFfO-xViEhJVQlCNWSY2smqYspg5ghgPEAjgHh_daCHHhU0ZnsNoD_TqvpHfbZVPWaluymP0tUfusNZEvWak"/>
+<div class="absolute top-sm right-sm bg-white/80 backdrop-blur-sm px-2 py-1 rounded text-label-sm font-label-sm text-on-surface shadow-sm border border-white/60">$80+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-xs">Facial Treatment</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-grow">Rejuvenating skincare treatments using premium organic products.</p>
+<div class="flex items-center text-on-surface-variant font-label-sm text-label-sm pt-md border-t border-black/5">
+<span class="material-symbols-outlined mr-xs text-[18px]" data-icon="schedule">schedule</span>
+                                60 min
+                                <div class="ml-auto flex items-center text-secondary group-hover:translate-x-1 transition-transform">
+                                    Book <span class="material-symbols-outlined ml-1 text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Service Card 3 -->
+<div class="bg-white/60 backdrop-blur-md rounded-lg border border-white/50 overflow-hidden hover:border-white/80 hover:bg-white/80 transition-all duration-300 group flex flex-col h-full cursor-pointer shadow-lg">
+<div class="h-48 overflow-hidden bg-white/40 relative">
+<img alt="Manicure" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A beautifully organized manicure station showing a neat row of sleek, identical nail polish bottles in subtle nude and pale pink tones. The bottles sit on a spotless white surface with a soft, clean aesthetic. The lighting is professional and bright, giving a clinical yet luxurious modern feeling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqqt_MyL3VaYkOh_i7-WoikiaDP_pbI_GVVchH4LojUf8KMBLPmf_gtizH9IRtUILJTlVRb3ddUC-wdbVno5z6bVBV8J--5n1sFQ1Ng_2_r_qoH5RdKlSjCVNveGKXKFuli-KmxZENtDno0mOvjNw72UwbQAySPLf0skuuRdC6CzfuH8viHfL_7IAB9_tnh2jFjh1obYHuPDST0KAA0ddk9id8iMd32Kk2JBptmUfVF60XPnJmeDb4ueDQf-uIxQRE3Qn-f18T1s4r"/>
+<div class="absolute top-sm right-sm bg-white/80 backdrop-blur-sm px-2 py-1 rounded text-label-sm font-label-sm text-on-surface shadow-sm border border-white/60">$35+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-xs">Manicure</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md flex-grow">Professional nail care, shaping, and premium polish application.</p>
+<div class="flex items-center text-on-surface-variant font-label-sm text-label-sm pt-md border-t border-black/5">
+<span class="material-symbols-outlined mr-xs text-[18px]" data-icon="schedule">schedule</span>
+                                45 min
+                                <div class="ml-auto flex items-center text-secondary group-hover:translate-x-1 transition-transform">
+                                    Book <span class="material-symbols-outlined ml-1 text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-lg flex justify-center">
+<button class="text-secondary font-label-md text-label-md px-md py-sm border border-white/50 bg-white/40 backdrop-blur-sm rounded hover:bg-white/60 transition-colors duration-150 flex items-center">
+                        View All Services <span class="material-symbols-outlined ml-xs text-[18px]" data-icon="arrow_outward">arrow_outward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Premium Packages Section -->
+<section class="py-xl px-lg border-t border-white/50">
+<div class="max-w-container-max w-full mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-md text-headline-md text-primary">Premium Packages</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Curated experiences for ultimate relaxation and transformation.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Package 1 -->
+<div class="bg-white/60 backdrop-blur-md rounded-xl border border-white/50 p-lg flex flex-col md:flex-row gap-lg items-center group hover:border-white/80 hover:bg-white/80 transition-all relative overflow-hidden shadow-lg">
+<div class="absolute top-0 right-0 bg-secondary/10 backdrop-blur-sm text-secondary font-label-sm text-label-sm px-3 py-1 rounded-bl-lg z-10 border-b border-l border-white/50">Best Value</div>
+<div class="w-full md:w-1/3 aspect-square rounded-lg bg-white/40 overflow-hidden shrink-0">
+<img alt="Spa Package" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGsp13PeY8XTOs31NAQxAutzZuTlyd_3cHgL_sQxmZhT_clsj4C49f5V1dmtVOiUEUE53iVonN29SWanWtOA0iosT4gUBKkdUvYVz_au9oQxB_tJfOUaF9ljzffruld9xY8tzdtKaXUrR2m6suuhgWqLECg5uM43BMhUPtq_oKua7nwVembNACVHYZ_xavhO2YOzSZw207XksHF8WRICEo79HGTMps4rfeqJ-e0kyjdhj0oNTq2__DumL4rgs7InjVvYSkY0iC-9oY"/>
+</div>
+<div class="flex flex-col flex-grow">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-xs">The Ultimate Spa Day</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">A full day of pampering including a 90-minute massage, organic facial, and luxury manicure/pedicure combo.</p>
+<div class="mt-auto flex items-center justify-between pt-md border-t border-black/5">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant line-through">$250</span>
+<span class="font-headline-sm text-headline-sm text-primary">$199</span>
+</div>
+<button class="text-secondary font-label-md text-label-md hover:bg-white/60 px-md py-sm rounded transition-colors flex items-center">
+                                        Book Package <span class="material-symbols-outlined ml-xs text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Package 2 -->
+<div class="bg-white/60 backdrop-blur-md rounded-xl border border-white/50 p-lg flex flex-col md:flex-row gap-lg items-center group hover:border-white/80 hover:bg-white/80 transition-all relative overflow-hidden shadow-lg">
+<div class="absolute top-0 right-0 bg-primary/10 backdrop-blur-sm text-primary font-label-sm text-label-sm px-3 py-1 rounded-bl-lg z-10 border-b border-l border-white/50">Popular</div>
+<div class="w-full md:w-1/3 aspect-square rounded-lg bg-white/40 overflow-hidden shrink-0">
+<img alt="Bridal Package" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5rapuGZQffVuhoIZuktc2_rzOIZSzScDT9JbFQj34Y4OTLP8BwQu_-T74H5g067DVCIPIp54JwLoT7ytFx_u5koa5gTKxFJ0SFtTA_3kgFm3PN71eSW9zNHGlFa0WGldwZq2tYaHppq_oLse5tVEzuys1-QcskbfOGdFX-1XrQJ5M3NvqS2yxbD6HA85Qf0yc6W1P1feA3xRamvkPNWEDGJSjiaj6EYyA5pFNWHNiqXCk7fpingrvu8bdS0ID17PRoF6VH6LIyWMf"/>
+</div>
+<div class="flex flex-col flex-grow">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-xs">Bridal Glow Package</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Complete hair styling, professional makeup application, and a pre-event glow facial for your special day.</p>
+<div class="mt-auto flex items-center justify-between pt-md border-t border-black/5">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant line-through">$300</span>
+<span class="font-headline-sm text-headline-sm text-primary">$249</span>
+</div>
+<button class="text-secondary font-label-md text-label-md hover:bg-white/60 px-md py-sm rounded transition-colors flex items-center">
+                                        Book Package <span class="material-symbols-outlined ml-xs text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Meet Our Team -->
+<section class="py-xl px-lg border-t border-white/50">
+<div class="max-w-container-max w-full mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-lg">
+<div class="max-w-2xl">
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Meet Our Experts</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Highly trained professionals dedicated to providing exceptional service.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md md:gap-lg">
+<!-- Team Member 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-full overflow-hidden bg-white/60 border-2 border-white/50 group-hover:border-primary/50 transition-colors mb-md mx-auto w-3/4 md:w-full shadow-md">
+<img alt="Sarah Jenkins" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A professional headshot of a confident, welcoming female stylist with dark hair, smiling slightly. She is wearing a clean, modern black smock. The background is a soft, out-of-focus light grey studio setting, conveying trust, professionalism, and modern corporate elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcve-fOl20miTgYBCo-2C80YjoS39BuBkq6D23Pq4OBLbbbisa_xzdqsZJXyQl9m4tW8a1up6wlIDyDOsQTJjfvIgKFroOyTRp7-DivjZBpPfP1ounskUR8M0dK7TIEvKGSgoVac0CGQ4NDckSq63n-StsAfdDPDIQRuBpcHee8UbLxkHXcOBYYwVRCreEtIaCz-v8xqrY5O3bQdo9jBs_dvqFOuoTOTW4onk_Gm_ZAGL8O57mn0ZjCSrz1G20mvGXit9NtZZBRFzu"/>
+</div>
+<div class="text-center">
+<h4 class="font-label-md text-label-md text-primary">Sarah Jenkins</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Master Stylist</p>
+</div>
+</div>
+<!-- Team Member 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-full overflow-hidden bg-white/60 border-2 border-white/50 group-hover:border-primary/50 transition-colors mb-md mx-auto w-3/4 md:w-full shadow-md">
+<img alt="David Chen" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A professional headshot of a polished male esthetician with short dark hair, giving a friendly but professional look. He wears a crisp white tunic. The lighting is even and bright against a neutral light background, highlighting a clean, trustworthy, and expert B2B SaaS aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIsE98T7wedA8uCTHb88SGdWBmfWkCOB-PRSn61BZ6WP4DKewln9q8QdIzfAV86IsxXXAZ8olNWNNKN_BWz3tZxkT6JuSNJbZbni28Tk8ysD9MnZV7iRVO6Pe18XNvWkWK2QGQJaMlhcQjH4OXZ76lnL-P4JXLTZ56cd8KCMl76Nasnugetu05zObMD-20jNnbGvgHHzF--cWvS-D2SG5IdmuYKQNIF1EHRyStUC8_fZi8VJCx0cRA7TGO9MO5Y48e9q9GAgMYCXd1"/>
+</div>
+<div class="text-center">
+<h4 class="font-label-md text-label-md text-primary">David Chen</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lead Esthetician</p>
+</div>
+</div>
+<!-- Team Member 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-full overflow-hidden bg-white/60 border-2 border-white/50 group-hover:border-primary/50 transition-colors mb-md mx-auto w-3/4 md:w-full shadow-md">
+<img alt="Maya Patel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A professional headshot of a warm, smiling female nail technician with brown hair pulled back. She is dressed in a minimalist, modern dark grey uniform. The background is a clean, bright, out-of-focus salon environment. The image feels approachable, highly professional, and perfectly suited for a premium business directory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwBS7AkmnLAm8kFNgP_PoLPsBxqMvGd6w0itEmCo64M5lyPKSS0cKZF1YMUjEc8B6aA37upNNC3yYDsnDEDXecBCzD_Es_SdLT3u6yWVmnyyUkyfB3xvJ9GW7Yhev945i3r7WsxowpXIgrs3X09JpkaGiMgvE4m3wD1IA57dgpiD2-QqmWph7q8kJb2IDLOXjPeHgOmnjipg9FIKPMi2yuKDeMhqfr2C4SE0Vde740rDR0Nz-NjSRxqqOBrOBdDNaHkedH5WPI9Vkx"/>
+</div>
+<div class="text-center">
+<h4 class="font-label-md text-label-md text-primary">Maya Patel</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Nail Specialist</p>
+</div>
+</div>
+<!-- Team Member 4 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-full overflow-hidden bg-white/60 border-2 border-white/50 group-hover:border-primary/50 transition-colors mb-md mx-auto w-3/4 md:w-full shadow-md">
+<img alt="James Wilson" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" data-alt="A professional headshot of a mature, experienced male colorist with styled grey hair, looking directly at the camera with a calm, confident demeanor. He wears a classic black button-down shirt. The shot uses soft, flattering light against a minimalist white backdrop, emphasizing premium service and expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTYCE5JuTux3uzbgX27XCM1KtfMtfHpumvd6Z6JLp5RqhPwXFQPp_v70UBcye6uA6ZX4M9CeUf6UQGewWH2JnA_at3naT2x5D1zfhOPK5z0F_qLJBWWKAqrY27a_k47Jf8JtXo4sBN7Wb3R9QdlJtWXpNTLOtbqGkzl9tKZohVJ77LLK-lBtYOi0ILD6Fw__g_RoYt5da53fe03Yq3NlQ2gjbWgvQViWQY8D_rInQJmkBU7l4uRa7dUyU9RfVqfX_uIdgtSdKjFVQO"/>
+</div>
+<div class="text-center">
+<h4 class="font-label-md text-label-md text-primary">James Wilson</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Color Director</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials Section -->
+<section class="py-xl px-lg border-t border-white/50">
+<div class="max-w-container-max w-full mx-auto">
+<div class="text-center mb-xl">
+<h2 class="font-headline-md text-headline-md text-primary">Client Stories</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Don't just take our word for it.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Testimonial 1 -->
+<div class="bg-white/60 backdrop-blur-md p-lg rounded-xl border border-white/50 shadow-lg flex flex-col">
+<div class="flex text-secondary mb-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-lg flex-grow">"Absolutely incredible experience. Sarah listened exactly to what I wanted and gave me the best haircut I've had in years. The salon atmosphere is so relaxing!"</p>
+<div class="flex items-center gap-sm mt-auto pt-md border-t border-black/5">
+<div class="w-10 h-10 rounded-full bg-white/60 overflow-hidden border border-white/50">
+<img alt="Emily R." class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgunEa-RGH40Z2MSNlsB27RBK9KZOBV4pes4S-yKlhijkcl4Z3urVbujCD4UxmacwyJlFYRfni7agEEL4bJns-XYSIQtjsFQ9W3kuinTbEj2_2x89dsqpy42T8Rn66cQAxSNlRafNXTw7fu69lD4V18q98YdwBH8GAZtXJKNPFJGGRxQIqit1QSU4LN65BzSyFNHrhASYxgMZdml8hfFojr9xnpM99vzbsM49hUfeo89vnt0XaZtvy3Y_Cqim-dU0DPq3_kclTw1wy"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Emily R.</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Haircut &amp; Style</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-white/60 backdrop-blur-md p-lg rounded-xl border border-white/50 shadow-lg flex flex-col">
+<div class="flex text-secondary mb-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-lg flex-grow">"The signature facial with David was life-changing. My skin has never felt so glowing and hydrated. Highly recommend booking a session!"</p>
+<div class="flex items-center gap-sm mt-auto pt-md border-t border-black/5">
+<div class="w-10 h-10 rounded-full bg-white/60 overflow-hidden border border-white/50">
+<img alt="Michael T." class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXIrG3DMrMEVq-KGPImKXr2c07y8aI1_fJ3qIZKb7PzsSszY5l3y_e4wTiGRrl6iPbZAWMguOeptP8CkS8lYozlmUxbzAgvM_hCRVlUQ-LREdRu00DVdZWzuGhKbcvf1g0x_FSiRq8sBwvN0vBDCIMrNH5ojvJJnrvPS_FEcHwgjKID3WKKDTLfhwNisR7sWDOlCdbHZ0k1ZYZ8s4jCwyRS9TTyJpN5ZIuBjjFJWhjZu20fmd_IrMKDhtn8RWr3VCD-79R5QOV_J-z"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Michael T.</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Signature Facial</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-white/60 backdrop-blur-md p-lg rounded-xl border border-white/50 shadow-lg flex flex-col">
+<div class="flex text-secondary mb-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star">star</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="star_half">star_half</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-lg flex-grow">"Beautiful salon, spotlessly clean, and Maya did a fantastic job on my gel manicure. It's been two weeks and not a single chip."</p>
+<div class="flex items-center gap-sm mt-auto pt-md border-t border-black/5">
+<div class="w-10 h-10 rounded-full bg-white/60 overflow-hidden border border-white/50">
+<img alt="Jessica L." class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHt0xihbdEkiv64rCKqPBhK74PrsSS-3y23MX2uQ9UhdshOMfVmnq2taLADuriMvY1sE-3xKT85TlxJbfFyVCHMgGh9O_C_DzpM3MZLvlu6cRkDu8Q2qsRYQbKMGxM_m9RSgYvBthtfZ7dVfhcDKSE5_yigO9DbOsH9UUZ9MU2JZimRvfPhcfrX6pKvMJcycpg7CVBXfFRWwpIiDsx-ESrMQxzAmjGgGgajBSvuAJsqvSBBY_xqoWxOKVK-MTPNzibo3AcIw_x8-vE"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Jessica L.</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gel Manicure</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Info & Map Section (Pre-Footer) -->
+<section class="py-lg px-lg border-t border-white/50">
+<div class="max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-xl items-center">
+<div class="bg-white/60 backdrop-blur-md p-lg rounded-xl border border-white/50 shadow-lg">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-md">Visit Us</h3>
+<div class="flex flex-col gap-md">
+<div class="flex items-start">
+</div></div></div></div></section></main></body></html>
