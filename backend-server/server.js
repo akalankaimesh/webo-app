@@ -9,6 +9,7 @@ const { OAuth2Client } = require('google-auth-library');
 const connectDB = require('./db');
 const User = require('./models/User');
 const AdminUser = require('./models/AdminUser');
+const AdminCategory = require('./models/AdminCategory');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -74,6 +75,15 @@ function formatAdminForClient(admin) {
     status: admin.status,
     lastLoginAt: admin.lastLoginAt,
   };
+}
+
+function toSlug(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 async function hashPassword(password) {
@@ -310,6 +320,109 @@ app.post('/api/admin/auth/login', async (req, res) => {
   } catch (error) {
     console.error('Admin login failed:', error.message);
     return res.status(500).json({ error: 'Failed to login admin user.' });
+  }
+});
+
+app.get('/api/admin/categories', async (req, res) => {
+  try {
+    const categories = await AdminCategory.find({}).sort({ createdAt: -1 });
+    return res.status(200).json({ categories });
+  } catch (error) {
+    console.error('Fetch categories failed:', error.message);
+    return res.status(500).json({ error: 'Failed to fetch categories.' });
+  }
+});
+
+app.post('/api/admin/categories', async (req, res) => {
+  const { name, description } = req.body || {};
+
+  if (!name || !String(name).trim()) {
+    return res.status(400).json({ error: 'Category name is required.' });
+  }
+
+  const normalizedName = String(name).trim();
+  const normalizedSlug = toSlug(normalizedName);
+
+  if (!normalizedSlug) {
+    return res.status(400).json({ error: 'Category name is invalid.' });
+  }
+
+  try {
+    const existing = await AdminCategory.findOne({
+      $or: [{ name: normalizedName }, { slug: normalizedSlug }],
+    });
+
+    if (existing) {
+      return res.status(409).json({ error: 'Category already exists.' });
+    }
+
+    const createdCategory = await AdminCategory.create({
+      name: normalizedName,
+      description: description ? String(description).trim() : '',
+      slug: normalizedSlug,
+      status: 'active',
+    });
+
+    return res.status(201).json({
+      message: 'Category created successfully.',
+      category: createdCategory,
+    });
+  } catch (error) {
+    console.error('Create category failed:', error.message);
+    return res.status(500).json({ error: 'Failed to create category.' });
+  }
+});
+
+app.post('/api/admin/categories/:categoryId/subcategories', async (req, res) => {
+  const { categoryId } = req.params;
+  const { name, description } = req.body || {};
+
+  if (!name || !String(name).trim()) {
+    return res.status(400).json({ error: 'Subcategory name is required.' });
+  }
+
+  if (!categoryId) {
+    return res.status(400).json({ error: 'Category id is required.' });
+  }
+
+  const normalizedName = String(name).trim();
+  const normalizedSlug = toSlug(normalizedName);
+
+  if (!normalizedSlug) {
+    return res.status(400).json({ error: 'Subcategory name is invalid.' });
+  }
+
+  try {
+    const category = await AdminCategory.findById(categoryId);
+
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found.' });
+    }
+
+    const subcategoryExists = category.subcategories.some(
+      (subcategory) => subcategory.slug === normalizedSlug || subcategory.name === normalizedName
+    );
+
+    if (subcategoryExists) {
+      return res.status(409).json({ error: 'Subcategory already exists in this category.' });
+    }
+
+    category.subcategories.push({
+      name: normalizedName,
+      description: description ? String(description).trim() : '',
+      slug: normalizedSlug,
+      status: 'active',
+    });
+
+    await category.save();
+
+    return res.status(201).json({
+      message: 'Subcategory created successfully.',
+      category,
+    });
+  } catch (error) {
+    console.error('Create subcategory failed:', error.message);
+    return res.status(500).json({ error: 'Failed to create subcategory.' });
   }
 });
 

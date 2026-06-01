@@ -17,12 +17,17 @@ const ADMIN_SESSION_STORAGE_KEY = "webo.admin.session";
 
 const navItems = [
   { label: "Home", href: "/admin", icon: "⌂" },
+  { label: "Categories", href: "/admin/categories", icon: "◫" },
   { label: "Calendar", href: "#", icon: "◷" },
   { label: "Bookings", href: "#", icon: "☰" },
-  { label: "Services", href: "#", icon: "◫" },
   { label: "Website Builder", href: "#", icon: "⌘" },
   { label: "Settings", href: "#", icon: "⚙" },
 ];
+
+const pageTitles: Record<string, string> = {
+  "/admin": "Overview",
+  "/admin/categories": "Categories",
+};
 
 export default function AdminDashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -68,7 +73,7 @@ export default function AdminDashboardLayout({ children }: { children: ReactNode
 
           <div className="flex-1 space-y-1 overflow-y-auto px-3">
             {navItems.map((item) => {
-              const isActive = item.href === "/admin" && pathname === "/admin";
+              const isActive = pathname === item.href;
 
               return (
                 <Link
@@ -121,7 +126,7 @@ export default function AdminDashboardLayout({ children }: { children: ReactNode
         <main className="min-h-screen w-full overflow-x-hidden">
           <header className="sticky top-0 z-30 flex items-center justify-between border-b border-outline-variant/30 bg-surface-container-lowest/20 px-4 py-3 shadow-md backdrop-blur-xl md:px-6">
             <div>
-              <h2 className="font-display text-2xl font-semibold text-on-surface md:text-3xl">Overview</h2>
+              <h2 className="font-display text-2xl font-semibold text-on-surface md:text-3xl">{pageTitles[pathname] || "Admin"}</h2>
               <p className="text-sm text-on-surface-variant">Here&apos;s what&apos;s happening with your business today.</p>
             </div>
             <div className="flex items-center gap-3">
