@@ -8,6 +8,7 @@ const { promisify } = require('util');
 const { OAuth2Client } = require('google-auth-library');
 const connectDB = require('./db');
 const User = require('./models/User');
+const AdminUser = require('./models/AdminUser');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,8 @@ const FRONTEND_URL_SET = new Set(FRONTEND_URLS);
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const googleClient = new OAuth2Client();
 const scryptAsync = promisify(crypto.scrypt);
+const SUPER_ADMIN_EMAIL = 'akalankaimesh@gmail.com';
+const SUPER_ADMIN_PASSWORD = '12345678';
 
 function isAllowedOrigin(origin) {
   if (!origin) {
@@ -62,6 +65,17 @@ function formatUserForClient(user) {
   };
 }
 
+function formatAdminForClient(admin) {
+  return {
+    id: String(admin._id),
+    name: admin.name,
+    email: admin.email,
+    role: admin.role,
+    status: admin.status,
+    lastLoginAt: admin.lastLoginAt,
+  };
+}
+
 async function hashPassword(password) {
   const salt = crypto.randomBytes(16).toString('hex');
   const derived = await scryptAsync(password, salt, 64);
@@ -87,6 +101,26 @@ async function verifyPassword(password, storedHash) {
   }
 
   return crypto.timingSafeEqual(storedKey, derivedKey);
+}
+
+async function seedSuperAdmin() {
+  const normalizedEmail = SUPER_ADMIN_EMAIL.trim().toLowerCase();
+  const existingAdmin = await AdminUser.findOne({ email: normalizedEmail });
+
+  if (existingAdmin) {
+    return;
+  }
+
+  const passwordHash = await hashPassword(SUPER_ADMIN_PASSWORD);
+  await AdminUser.create({
+    name: 'Akalanka Imesh',
+    email: normalizedEmail,
+    password: passwordHash,
+    role: 'super_admin',
+    status: 'active',
+  });
+
+  console.log(`Super admin seeded: ${normalizedEmail}`);
 }
 
 // Middleware
@@ -242,6 +276,43 @@ app.post('/api/auth/google', async (req, res) => {
   }
 });
 
+app.post('/api/admin/auth/login', async (req, res) => {
+  const { email, password } = req.body || {};
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  try {
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const admin = await AdminUser.findOne({ email: normalizedEmail });
+
+    if (!admin) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+
+    if (admin.status !== 'active') {
+      return res.status(403).json({ error: 'Admin account is not active.' });
+    }
+
+    const passwordValid = await verifyPassword(String(password), admin.password);
+    if (!passwordValid) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+
+    admin.lastLoginAt = new Date();
+    await admin.save();
+
+    return res.status(200).json({
+      message: 'Admin login successful.',
+      admin: formatAdminForClient(admin),
+    });
+  } catch (error) {
+    console.error('Admin login failed:', error.message);
+    return res.status(500).json({ error: 'Failed to login admin user.' });
+  }
+});
+
 app.get('/api/auth/user-details', async (req, res) => {
   const { email } = req.query || {};
   if (!email || !isValidEmail(String(email))) {
@@ -325,6 +396,9 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB then start the server
 connectDB()
+  .then(() => {
+    return seedSuperAdmin();
+  })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is listening on port ${PORT}`);
