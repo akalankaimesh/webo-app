@@ -4,12 +4,16 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
 const { promisify } = require('util');
 const { OAuth2Client } = require('google-auth-library');
 const connectDB = require('./db');
 const User = require('./models/User');
 const AdminUser = require('./models/AdminUser');
 const AdminCategory = require('./models/AdminCategory');
+const AdminService = require('./models/AdminService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +29,36 @@ const googleClient = new OAuth2Client();
 const scryptAsync = promisify(crypto.scrypt);
 const SUPER_ADMIN_EMAIL = 'akalankaimesh@gmail.com';
 const SUPER_ADMIN_PASSWORD = '12345678';
+const uploadsRootDir = path.join(__dirname, 'uploads');
+const servicesUploadsDir = path.join(uploadsRootDir, 'services');
+
+if (!fs.existsSync(servicesUploadsDir)) {
+  fs.mkdirSync(servicesUploadsDir, { recursive: true });
+}
+
+const serviceImageStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, servicesUploadsDir);
+  },
+  filename(req, file, cb) {
+    const extension = path.extname(file.originalname || '').toLowerCase();
+    const base = toSlug(path.basename(file.originalname || 'service-image', extension)) || 'service-image';
+    cb(null, `${Date.now()}-${base}${extension || '.jpg'}`);
+  },
+});
+
+const serviceImageUpload = multer({
+  storage: serviceImageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter(req, file, cb) {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
+      cb(null, true);
+      return;
+    }
+
+    cb(new Error('Only image files are allowed for service image uploads.'));
+  },
+});
 
 function isAllowedOrigin(origin) {
   if (!origin) {
@@ -151,6 +185,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 app.use(express.json()); // Parses incoming JSON payloads
+app.use('/uploads', express.static(uploadsRootDir));
 
 // Test Route
 app.get('/', (req, res) => {
@@ -426,6 +461,90 @@ app.post('/api/admin/categories/:categoryId/subcategories', async (req, res) => 
   }
 });
 
+app.get('/api/admin/services', async (req, res) => {
+  try {
+    const services = await AdminService.find({}).sort({ createdAt: -1 });
+    return res.status(200).json({ services });
+  } catch (error) {
+    console.error('Fetch services failed:', error.message);
+    return res.status(500).json({ error: 'Failed to fetch services.' });
+  }
+});
+
+app.post('/api/admin/services', serviceImageUpload.single('imageFile'), async (req, res) => {
+  const { name, description, imageUrl, priceFrom, durationMinutes, categoryId, subcategoryId } = req.body || {};
+
+  if (!name || !String(name).trim()) {
+    return res.status(400).json({ error: 'Service name is required.' });
+  }
+
+  if (!categoryId || !subcategoryId) {
+    return res.status(400).json({ error: 'Category and subcategory are required.' });
+  }
+
+  const uploadedFile = req.file;
+  let normalizedImage = '';
+
+  if (uploadedFile) {
+    normalizedImage = `${req.protocol}://${req.get('host')}/uploads/services/${uploadedFile.filename}`;
+  } else if (imageUrl && String(imageUrl).trim()) {
+    normalizedImage = String(imageUrl).trim();
+    if (!/^https?:\/\//i.test(normalizedImage)) {
+      return res.status(400).json({ error: 'Image URL must be a valid URL.' });
+    }
+  } else {
+    return res.status(400).json({ error: 'Service image is required. Upload a file or provide an image URL.' });
+  }
+
+  const normalizedPrice = Number(priceFrom);
+  const normalizedDuration = Number(durationMinutes);
+
+  if (!Number.isFinite(normalizedPrice) || normalizedPrice < 0) {
+    return res.status(400).json({ error: 'Price must be a valid positive number.' });
+  }
+
+  if (!Number.isFinite(normalizedDuration) || normalizedDuration < 1) {
+    return res.status(400).json({ error: 'Duration must be at least 1 minute.' });
+  }
+
+  try {
+    const category = await AdminCategory.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found.' });
+    }
+
+    const subcategory = category.subcategories.id(subcategoryId);
+    if (!subcategory) {
+      return res.status(404).json({ error: 'Subcategory not found for selected category.' });
+    }
+
+    const normalizedName = String(name).trim();
+    const slug = toSlug(normalizedName) || `service-${Date.now()}`;
+
+    const createdService = await AdminService.create({
+      name: normalizedName,
+      description: description ? String(description).trim() : '',
+      image: normalizedImage,
+      slug,
+      priceFrom: normalizedPrice,
+      durationMinutes: normalizedDuration,
+      categoryId: category._id,
+      categoryName: category.name,
+      subcategoryId: subcategory._id,
+      subcategoryName: subcategory.name,
+      status: 'active',
+    });
+
+    return res.status(201).json({
+      message: 'Service created successfully.',
+      service: createdService,
+    });
+  } catch (error) {
+    console.error('Create service failed:', error.message);
+    return res.status(500).json({ error: 'Failed to create service.' });
+  }
+});
+
 app.get('/api/auth/user-details', async (req, res) => {
   const { email } = req.query || {};
   if (!email || !isValidEmail(String(email))) {
@@ -498,6 +617,18 @@ app.post('/api/auth/complete-profile', completeProfileHandler);
 app.use((err, req, res, next) => {
   if (err && typeof err.message === 'string' && err.message.startsWith('Not allowed by CORS')) {
     return res.status(403).json({ error: err.message });
+  }
+
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'Image file is too large. Max size is 5MB.' });
+    }
+
+    return res.status(400).json({ error: err.message || 'Invalid upload payload.' });
+  }
+
+  if (err && typeof err.message === 'string' && err.message.includes('Only image files are allowed')) {
+    return res.status(400).json({ error: err.message });
   }
 
   if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {

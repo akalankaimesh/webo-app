@@ -22,3 +22,4 @@ webo-app/out/
 # Backend outputs
 backend-server/dist/
 backend-server/build/
+backend-server/uploads/

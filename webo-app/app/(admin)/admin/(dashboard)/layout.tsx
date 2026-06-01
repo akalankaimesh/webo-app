@@ -18,6 +18,7 @@ const ADMIN_SESSION_STORAGE_KEY = "webo.admin.session";
 const navItems = [
   { label: "Home", href: "/admin", icon: "⌂" },
   { label: "Categories", href: "/admin/categories", icon: "◫" },
+  { label: "Services", href: "/admin/services", icon: "✦" },
   { label: "Calendar", href: "#", icon: "◷" },
   { label: "Bookings", href: "#", icon: "☰" },
   { label: "Website Builder", href: "#", icon: "⌘" },
@@ -27,6 +28,7 @@ const navItems = [
 const pageTitles: Record<string, string> = {
   "/admin": "Overview",
   "/admin/categories": "Categories",
+  "/admin/services": "Services",
 };
 
 export default function AdminDashboardLayout({ children }: { children: ReactNode }) {
